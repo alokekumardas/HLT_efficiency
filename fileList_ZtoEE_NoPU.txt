@@ -1,0 +1,1 @@
+/eos/cms/store/group/phys_egamma/Run3TriggerStudies/rasharma/Ntuples/Winter20_110X_v2/ZToEE_TuneCUETP8M1_14TeV-pythia8/DYEE_NoPURAW/210428_200643/0000/TnP_ntuple_1.root
