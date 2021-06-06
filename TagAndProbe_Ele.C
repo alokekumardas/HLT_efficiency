@@ -462,7 +462,6 @@ for(int i=0; i<systematicVar.size();i++)
 //      cout<<" testfilterDecision32 value = "<<testfilterDecision32[first][0]<<endl;
 //      cout<<" testfilterDecision32 value 2 = "<<testfilterDecision32[second][0]<<endl;
       bool tag_TriggerMatch_L1SingleEGOr		=testfilterDecision32[first][0];
- //     cout<<" tag_TriggerMatch_L1SingleEGOr	 = 	"<<tag_TriggerMatch_L1SingleEGOr<<endl;;
       bool tag_TriggerMatch_32L1SingleEGOr		=testfilterDecision32[first][1];
       bool tag_TriggerMatch_ClusterShape		=testfilterDecision32[first][2];
       bool tag_TriggerMatch_HEFilter			=testfilterDecision32[first][3];
@@ -476,27 +475,29 @@ for(int i=0; i<systematicVar.size();i++)
       bool tag_TriggerMatch_GsfDphi			=testfilterDecision32[first][11];
       bool tag_TriggerMatch_GsfTrackIso			=testfilterDecision32[first][12];
 
-//      if(!(tag_EleId && tag_EleKin && tag_TriggerMatch))continue;
+      bool tag_TriggerMatch =  tag_TriggerMatch_L1SingleEGOr && tag_TriggerMatch_32L1SingleEGOr && tag_TriggerMatch_ClusterShape && tag_TriggerMatch_HEFilter && tag_TriggerMatch_EcalIso && tag_TriggerMatch_HcalIso && tag_TriggerMatch_PixelMatch && tag_TriggerMatch_PMS2 && tag_TriggerMatch_GsfOneOEMinusOneOP && tag_TriggerMatch_GsfMissingHits && tag_TriggerMatch_GsfDeta && tag_TriggerMatch_GsfDphi && tag_TriggerMatch_GsfTrackIso ;
+
+      if(!(tag_EleId && tag_EleKin && tag_TriggerMatch))continue;
 //      if(!(tag_EleId && tag_EleKin && tag_TriggerMatch_L1SingleEGOr))continue;
-      if(!(tag_EleId && tag_EleKin))continue;
+//      if(!(tag_EleId && tag_EleKin))continue;
 
       bool probe_EleId = HWW_Electron_NewDef(second, ele_etaSC->at(second));
       bool probe_EleKin = fabs(ele_etaSC->at(second))<2.5;
 
       bool pass32Filter_L1SingleEGOr		=testfilterDecision32[second][0];
  //     cout<<" pass32Filter_L1SingleEGOr = "<<pass32Filter_L1SingleEGOr<<endl;
-      bool pass32Filter_32L1SingleEGOr		=testfilterDecision32[second][1];
-      bool pass32Filter_ClusterShape		=testfilterDecision32[second][2];
-      bool pass32Filter_HEFilter		=testfilterDecision32[second][3];
-      bool pass32Filter_EcalIso			=testfilterDecision32[second][4];
-      bool pass32Filter_HcalIso			=testfilterDecision32[second][5];
-      bool pass32Filter_PixelMatch		=testfilterDecision32[second][6];
-      bool pass32Filter_PMS2			=testfilterDecision32[second][7];
-      bool pass32Filter_GsfOneOEMinusOneOP	=testfilterDecision32[second][8];
-      bool pass32Filter_GsfMissingHits		=testfilterDecision32[second][9];
-      bool pass32Filter_GsfDeta			=testfilterDecision32[second][10];
-      bool pass32Filter_GsfDphi			=testfilterDecision32[second][11];
-      bool pass32Filter_GsfTrackIso		=testfilterDecision32[second][12];
+      bool pass32Filter_32L1SingleEGOr		=testfilterDecision32[second][1] && pass32Filter_L1SingleEGOr ;
+      bool pass32Filter_ClusterShape		=testfilterDecision32[second][2] && pass32Filter_32L1SingleEGOr ;
+      bool pass32Filter_HEFilter		=testfilterDecision32[second][3] && pass32Filter_ClusterShape ;
+      bool pass32Filter_EcalIso			=testfilterDecision32[second][4] && pass32Filter_HEFilter;
+      bool pass32Filter_HcalIso			=testfilterDecision32[second][5] && pass32Filter_EcalIso ;
+      bool pass32Filter_PixelMatch		=testfilterDecision32[second][6] && pass32Filter_HcalIso;
+      bool pass32Filter_PMS2			=testfilterDecision32[second][7] && pass32Filter_PixelMatch;
+      bool pass32Filter_GsfOneOEMinusOneOP	=testfilterDecision32[second][8] && pass32Filter_PMS2 ;
+      bool pass32Filter_GsfMissingHits		=testfilterDecision32[second][9] && pass32Filter_GsfOneOEMinusOneOP ;
+      bool pass32Filter_GsfDeta			=testfilterDecision32[second][10] && pass32Filter_GsfMissingHits ;
+      bool pass32Filter_GsfDphi			=testfilterDecision32[second][11] && pass32Filter_GsfDeta;
+      bool pass32Filter_GsfTrackIso		=testfilterDecision32[second][12] && pass32Filter_GsfDphi;
 
 
   //    if(!(probe_EleId && probe_EleKin)) continue;
@@ -517,80 +518,80 @@ for(int i=0; i<systematicVar.size();i++)
       if(ele_pt->at(second)>35)h_Ele27_eta_total->Fill(ele_etaSC->at(second));
       h_Ele27_pt_eta_total->Fill(ele_etaSC->at(second),ele_pt->at(second));
 */  
-     if(tag_TriggerMatch_L1SingleEGOr){ 
-      h_Ele32_PU_total_filter1->Fill(nPV);
+      
+      if(ele_pt->at(second)>40)h_Ele32_PU_total_filter1->Fill(nPV);
       h_Ele32_pt_total_filter1->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_total_filter1->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_total_filter1->Fill(ele_etaSC->at(second),ele_pt->at(second));
-    }
-     if(tag_TriggerMatch_32L1SingleEGOr){ 
-      h_Ele32_PU_total_filter2->Fill(nPV);
+   
+     if(pass32Filter_L1SingleEGOr){ 
+     if(ele_pt->at(second)>40) h_Ele32_PU_total_filter2->Fill(nPV);
       h_Ele32_pt_total_filter2->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_total_filter2->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_total_filter2->Fill(ele_etaSC->at(second),ele_pt->at(second));
     }
-     if(tag_TriggerMatch_ClusterShape){ 
-      h_Ele32_PU_total_filter3->Fill(nPV);
+     if(pass32Filter_32L1SingleEGOr){ 
+     if(ele_pt->at(second)>40) h_Ele32_PU_total_filter3->Fill(nPV);
       h_Ele32_pt_total_filter3->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_total_filter3->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_total_filter3->Fill(ele_etaSC->at(second),ele_pt->at(second));
     }
-     if(tag_TriggerMatch_HEFilter){ 
-      h_Ele32_PU_total_filter4->Fill(nPV);
+     if(pass32Filter_ClusterShape){ 
+      if(ele_pt->at(second)>40)h_Ele32_PU_total_filter4->Fill(nPV);
       h_Ele32_pt_total_filter4->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_total_filter4->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_total_filter4->Fill(ele_etaSC->at(second),ele_pt->at(second));
     }
-     if(tag_TriggerMatch_EcalIso){ 
-      h_Ele32_PU_total_filter5->Fill(nPV);
+     if( pass32Filter_HEFilter){ 
+      if(ele_pt->at(second)>40)h_Ele32_PU_total_filter5->Fill(nPV);
       h_Ele32_pt_total_filter5->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_total_filter5->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_total_filter5->Fill(ele_etaSC->at(second),ele_pt->at(second));
     }
-     if(tag_TriggerMatch_HcalIso){ 
-      h_Ele32_PU_total_filter6->Fill(nPV);
+     if(pass32Filter_EcalIso){ 
+      if(ele_pt->at(second)>40)h_Ele32_PU_total_filter6->Fill(nPV);
       h_Ele32_pt_total_filter6->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_total_filter6->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_total_filter6->Fill(ele_etaSC->at(second),ele_pt->at(second));
     }
-     if(tag_TriggerMatch_PixelMatch){ 
-      h_Ele32_PU_total_filter7->Fill(nPV);
+     if(pass32Filter_HcalIso){ 
+      if(ele_pt->at(second)>40)h_Ele32_PU_total_filter7->Fill(nPV);
       h_Ele32_pt_total_filter7->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_total_filter7->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_total_filter7->Fill(ele_etaSC->at(second),ele_pt->at(second));
     }
-     if(tag_TriggerMatch_PMS2){ 
-      h_Ele32_PU_total_filter8->Fill(nPV);
+     if(pass32Filter_PixelMatch){ 
+      if(ele_pt->at(second)>40)h_Ele32_PU_total_filter8->Fill(nPV);
       h_Ele32_pt_total_filter8->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_total_filter8->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_total_filter8->Fill(ele_etaSC->at(second),ele_pt->at(second));
     }
-     if(tag_TriggerMatch_GsfOneOEMinusOneOP){ 
-      h_Ele32_PU_total_filter9->Fill(nPV);
+     if(pass32Filter_PMS2){ 
+      if(ele_pt->at(second)>40)h_Ele32_PU_total_filter9->Fill(nPV);
       h_Ele32_pt_total_filter9->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_total_filter9->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_total_filter9->Fill(ele_etaSC->at(second),ele_pt->at(second));
     }
-     if(tag_TriggerMatch_GsfMissingHits){ 
-      h_Ele32_PU_total_filter10->Fill(nPV);
+     if(pass32Filter_GsfOneOEMinusOneOP){ 
+      if(ele_pt->at(second)>40)h_Ele32_PU_total_filter10->Fill(nPV);
       h_Ele32_pt_total_filter10->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_total_filter10->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_total_filter10->Fill(ele_etaSC->at(second),ele_pt->at(second));
     }
-     if(tag_TriggerMatch_GsfDeta){ 
-      h_Ele32_PU_total_filter11->Fill(nPV);
+     if( pass32Filter_GsfMissingHits){ 
+      if(ele_pt->at(second)>40)h_Ele32_PU_total_filter11->Fill(nPV);
       h_Ele32_pt_total_filter11->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_total_filter11->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_total_filter11->Fill(ele_etaSC->at(second),ele_pt->at(second));
     }
-     if(tag_TriggerMatch_GsfDphi){ 
-      h_Ele32_PU_total_filter12->Fill(nPV);
+     if(pass32Filter_GsfDeta){ 
+      if(ele_pt->at(second)>40)h_Ele32_PU_total_filter12->Fill(nPV);
       h_Ele32_pt_total_filter12->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_total_filter12->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_total_filter12->Fill(ele_etaSC->at(second),ele_pt->at(second));
     }
-     if(tag_TriggerMatch_GsfTrackIso){ 
-      h_Ele32_PU_total_filter13->Fill(nPV);
+     if( pass32Filter_GsfDphi){ 
+      if(ele_pt->at(second)>40)h_Ele32_PU_total_filter13->Fill(nPV);
       h_Ele32_pt_total_filter13->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_total_filter13->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_total_filter13->Fill(ele_etaSC->at(second),ele_pt->at(second));
@@ -659,91 +660,91 @@ for(int i=0; i<systematicVar.size();i++)
 
 */
       if (pass32Filter_L1SingleEGOr){
-      h_Ele32_PU_pass_filter1->Fill(nPV);
+      if(ele_pt->at(second)>40)h_Ele32_PU_pass_filter1->Fill(nPV);
       h_Ele32_pt_pass_filter1->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_pass_filter1->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_pass_filter1->Fill(ele_etaSC->at(second),ele_pt->at(second));
       }
 
       if (pass32Filter_32L1SingleEGOr){
-      h_Ele32_PU_pass_filter2->Fill(nPV);
+      if(ele_pt->at(second)>40)h_Ele32_PU_pass_filter2->Fill(nPV);
       h_Ele32_pt_pass_filter2->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_pass_filter2->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_pass_filter4->Fill(ele_etaSC->at(second),ele_pt->at(second));
       }
 
       if (pass32Filter_ClusterShape){
-      h_Ele32_PU_pass_filter3->Fill(nPV);
+      if(ele_pt->at(second)>40)h_Ele32_PU_pass_filter3->Fill(nPV);
       h_Ele32_pt_pass_filter3->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_pass_filter3->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_pass_filter3->Fill(ele_etaSC->at(second),ele_pt->at(second));
       }
 
       if (pass32Filter_HEFilter){
-      h_Ele32_PU_pass_filter4->Fill(nPV);
+      if(ele_pt->at(second)>40)h_Ele32_PU_pass_filter4->Fill(nPV);
       h_Ele32_pt_pass_filter4->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_pass_filter4->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_pass_filter4->Fill(ele_etaSC->at(second),ele_pt->at(second));
       }
 
       if (pass32Filter_EcalIso){
-      h_Ele32_PU_pass_filter5->Fill(nPV);
+      if(ele_pt->at(second)>40)h_Ele32_PU_pass_filter5->Fill(nPV);
       h_Ele32_pt_pass_filter5->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_pass_filter5->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_pass_filter5->Fill(ele_etaSC->at(second),ele_pt->at(second));
       }
 
       if (pass32Filter_HcalIso){
-      h_Ele32_PU_pass_filter6->Fill(nPV);
+      if(ele_pt->at(second)>40)h_Ele32_PU_pass_filter6->Fill(nPV);
       h_Ele32_pt_pass_filter6->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_pass_filter6->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_pass_filter6->Fill(ele_etaSC->at(second),ele_pt->at(second));
       }
 
       if (pass32Filter_PixelMatch){
-      h_Ele32_PU_pass_filter7->Fill(nPV);
+      if(ele_pt->at(second)>40)h_Ele32_PU_pass_filter7->Fill(nPV);
       h_Ele32_pt_pass_filter7->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_pass_filter7->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_pass_filter7->Fill(ele_etaSC->at(second),ele_pt->at(second));
       }
 
       if (pass32Filter_PMS2){
-      h_Ele32_PU_pass_filter8->Fill(nPV);
+      if(ele_pt->at(second)>40)h_Ele32_PU_pass_filter8->Fill(nPV);
       h_Ele32_pt_pass_filter8->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_pass_filter8->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_pass_filter8->Fill(ele_etaSC->at(second),ele_pt->at(second));
       }
 
       if (pass32Filter_GsfOneOEMinusOneOP){
-      h_Ele32_PU_pass_filter9->Fill(nPV);
+      if(ele_pt->at(second)>40)h_Ele32_PU_pass_filter9->Fill(nPV);
       h_Ele32_pt_pass_filter9->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_pass_filter9->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_pass_filter9->Fill(ele_etaSC->at(second),ele_pt->at(second));
       }
 
       if (pass32Filter_GsfMissingHits){
-      h_Ele32_PU_pass_filter10->Fill(nPV);
+      if(ele_pt->at(second)>40)h_Ele32_PU_pass_filter10->Fill(nPV);
       h_Ele32_pt_pass_filter10->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_pass_filter10->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_pass_filter10->Fill(ele_etaSC->at(second),ele_pt->at(second));
       }
 
       if (pass32Filter_GsfDeta){
-      h_Ele32_PU_pass_filter11->Fill(nPV);
+      if(ele_pt->at(second)>40)h_Ele32_PU_pass_filter11->Fill(nPV);
       h_Ele32_pt_pass_filter11->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_pass_filter11->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_pass_filter11->Fill(ele_etaSC->at(second),ele_pt->at(second));
       }
 
       if (pass32Filter_GsfDphi){
-      h_Ele32_PU_pass_filter12->Fill(nPV);
+      if(ele_pt->at(second)>40)h_Ele32_PU_pass_filter12->Fill(nPV);
       h_Ele32_pt_pass_filter12->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_pass_filter12->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_pass_filter12->Fill(ele_etaSC->at(second),ele_pt->at(second));
       }
 
       if (pass32Filter_GsfTrackIso){
-      h_Ele32_PU_pass_filter13->Fill(nPV);
+      if(ele_pt->at(second)>40)h_Ele32_PU_pass_filter13->Fill(nPV);
       h_Ele32_pt_pass_filter13->Fill(ele_pt->at(second));
       if(ele_pt->at(second)>40)h_Ele32_eta_pass_filter13->Fill(ele_etaSC->at(second));
       h_Ele32_pt_eta_pass_filter13->Fill(ele_etaSC->at(second),ele_pt->at(second));
