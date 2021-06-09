@@ -458,6 +458,7 @@ for(int i=0; i<systematicVar.size();i++)
       if(ele_charge->at(first) * ele_charge->at(second)>0)continue;
       bool tag_EleId = passEleIdTight->at(first);
       bool tag_EleKin = ele_pt->at(first)>ptTag && fabs(ele_etaSC->at(first))<2.5;
+     
       //bool tag_TriggerMatch = passFilterEle32->at(first);
 //      cout<<" testfilterDecision32 value = "<<testfilterDecision32[first][0]<<endl;
 //      cout<<" testfilterDecision32 value 2 = "<<testfilterDecision32[second][0]<<endl;
@@ -518,6 +519,13 @@ for(int i=0; i<systematicVar.size();i++)
       if(ele_pt->at(second)>35)h_Ele27_eta_total->Fill(ele_etaSC->at(second));
       h_Ele27_pt_eta_total->Fill(ele_etaSC->at(second),ele_pt->at(second));
 */  
+
+     
+      if(ele_pt->at(second)>40)h_Ele32_PU_total->Fill(nPV); //full trigger
+      h_Ele32_pt_total->Fill(ele_pt->at(second));
+      if(ele_pt->at(second)>40)h_Ele32_eta_total->Fill(ele_etaSC->at(second));
+      h_Ele32_pt_eta_total->Fill(ele_etaSC->at(second),ele_pt->at(second));
+
       
       if(ele_pt->at(second)>40)h_Ele32_PU_total_filter1->Fill(nPV);
       h_Ele32_pt_total_filter1->Fill(ele_pt->at(second));
@@ -750,6 +758,12 @@ for(int i=0; i<systematicVar.size();i++)
       h_Ele32_pt_eta_pass_filter13->Fill(ele_etaSC->at(second),ele_pt->at(second));
       }
 
+      if (pass32Filter_GsfTrackIso){ //full trigger since last filter passes means passes full triger path.
+      if(ele_pt->at(second)>40)h_Ele32_PU_pass->Fill(nPV);
+      h_Ele32_pt_pass->Fill(ele_pt->at(second));
+      if(ele_pt->at(second)>40)h_Ele32_eta_pass->Fill(ele_etaSC->at(second));
+      h_Ele32_pt_eta_pass->Fill(ele_etaSC->at(second),ele_pt->at(second));
+      }
       // if (Cut(ientry) < 0) continue;
     }
 file->Write(); 
